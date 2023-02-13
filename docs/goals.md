@@ -12,3 +12,4 @@ The following features are NOT to be implemented.
 
 - dealing with different terminal sizes
 - dynamic world sizes
+- flags, options etc (args are only for init coords)

@@ -14,18 +14,60 @@ struct World {
 	int fields[WORLD_MAX_X][WORLD_MAX_Y];
 };
 
-void copy_world(struct World *out, struct World *in)
+void copy_world(const struct World *out, struct World *in)
 {
 	long unsigned x, y;
 	
 	for (x = 0; x < out->w; x += 1) {
 		for (y = 0; y < out->h; y += 1) {
-			out->fields[x][y] = in->fields[x][y];
+			in->fields[x][y] = out->fields[x][y];
 		}
 	}
 }
 
-void eval_world(struct World  *wld)
+long unsigned
+count_neighbors(const struct World *wld,
+                long unsigned       x,
+                long unsigned       y)
+{
+	long unsigned ret = 0;
+	
+	if (x > 0)
+		if (wld->fields[x - 1][y])
+			ret += 1;
+
+	if (y > 0)
+		if (wld->fields[x][y - 1])
+			ret += 1;
+
+	if (x < (wld->w - 1))
+		if (wld->fields[x + 1][y])
+			ret += 1;
+
+	if (y < (wld->h - 1))
+		if (wld->fields[x][y + 1])
+			ret += 1;
+
+	if (x > 0 && y > 0)
+		if (wld->fields[x - 1][y - 1])
+			ret += 1;
+
+	if (x < (wld->w - 1) && y > 0)
+		if (wld->fields[x + 1][y - 1])
+			ret += 1;
+
+	if (x > 0 && y < (wld->h - 1))
+		if (wld->fields[x - 1][y + 1])
+			ret += 1;
+
+	if (x < (wld->w - 1) && y < (wld->h - 1))
+		if (wld->fields[x + 1][y + 1])
+			ret += 1;
+	
+	return ret;
+}
+
+void eval_world(struct World *wld)
 {
 	unsigned int neighbors;
 	long unsigned x, y;
@@ -38,50 +80,7 @@ void eval_world(struct World  *wld)
 	
 	for (x = 0; x < wld->w; x += 1) {
 		for (y = 0; y < wld->h; y += 1) {
-			neighbors = 0;
-			
-			if (x > 0)
-				if (wld->fields[x - 1][y])
-					neighbors += 1;
-			
-			if (y > 0)
-				if (wld->fields[x][y - 1])
-					neighbors += 1;
-			
-			if (x < wld->w)
-				if (wld->fields[x + 1][y])
-					neighbors += 1;
-			
-			if (y < wld->h)
-				if (wld->fields[x][y + 1])
-					neighbors += 1;
-			
-			if (x > 0 && y > 0)
-				if (wld->fields[x - 1][y - 1])
-					neighbors += 1;
-			
-			if (x < wld->w && y > 0)
-				if (wld->fields[x + 1][y - 1])
-					neighbors += 1;
-			
-			if (x > 0 && y < wld->h)
-				if (wld->fields[x - 1][y + 1])
-					neighbors += 1;
-			
-			if (x < wld->w && y < wld->h)
-				if (wld->fields[x + 1][y + 1])
-					neighbors += 1;
-
-
-
-
-// this informs me on how much i suck TODO stop it
-if (neighbors > 0)
-	printf("%lu %lu : %lu\n", x, y, neighbors);
-	
-	
-	
-	
+			neighbors = count_neighbors(wld, x, y);
 
 			if (neighbors == 3)
 				new_wld.fields[x][y] = 1;
@@ -121,9 +120,9 @@ int main(int argc, char *argv[])
 	}
 	
 	while (active) {
-		printf("\n");
-		
 		for (y = 0; y < wld.h; y += 1) {
+			printf("\n");
+			
 			for (x = 0; x < wld.w; x += 1) {
 				if (wld.fields[x][y]) {
 					printf("x");
@@ -131,7 +130,6 @@ int main(int argc, char *argv[])
 					printf(" ");
 				}
 			}
-			printf("\n");
 		}
 		
 		eval_world(&wld);
