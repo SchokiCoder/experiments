@@ -1,9 +1,11 @@
 
 # Goals
 
-To implement a Conway's Game of Life in various languages.
+To implement a Conway's Game of Life in various languages.  
+The goals are described after the C implementation
+and prescribe all other implementations.  
 
-- 80 x 24
+- in terminal with 80 x 24
 - confirmation based (progresses upon keypress)
 
 # NON Goals

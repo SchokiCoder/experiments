@@ -1,0 +1,6 @@
+{
+	-go				.
+		->make idiomatic		.
+
+	-zig				.
+}
