@@ -5,7 +5,7 @@
 
 package main
 
-import "fmt"
+import ("fmt"; "os"; "strconv")
 
 const WORLD_MAX_X uint = 80
 const WORLD_MAX_Y uint = 24
@@ -15,12 +15,15 @@ type World struct {
 	fields[WORLD_MAX_X][WORLD_MAX_Y] bool
 };
 
-func copy_world(out World) (ret World) {
+func copy_world(src World) (ret World) {
 	var x, y uint
 	
-	for x = 0; x < out.w; x += 1 {
-		for y = 0; y < out.h; y += 1 {
-			ret.fields[x][y] = out.fields[x][y];
+	ret.w = src.w
+	ret.h = src.h
+	
+	for x = 0; x < src.w; x += 1 {
+		for y = 0; y < src.h; y += 1 {
+			ret.fields[x][y] = src.fields[x][y]
 		}
 	}
 	
@@ -82,63 +85,70 @@ func count_neighbors(wld World, x, y uint) (ret uint) {
 func eval_world(wld *World) {
 	var neighbors uint
 	var x, y uint
-	var new_wld World = World {
-		w: wld.w,
-		h: wld.h,
-	}
+	var new_wld World;
 	
-	copy_world(wld, &new_wld);
+	new_wld = copy_world(*wld)
 	
 	for x = 0; x < wld.w; x += 1 {
 		for y = 0; y < wld.h; y += 1 {
-			neighbors = count_neighbors(wld, x, y)
+			neighbors = count_neighbors(*wld, x, y)
 
 			if neighbors == 3 {
-				new_wld.fields[x][y] = 1
+				new_wld.fields[x][y] = true
 			} else if neighbors != 2 {
-				new_wld.fields[x][y] = 0
+				new_wld.fields[x][y] = false
 			}
 		}
 	}
 	
-	copy_world(&new_wld, wld)
+	*wld = copy_world(new_wld)
 }
 
-func main(argc int, argv []string) int {
-	var active bool = true;
+func main() {
+	var active bool = true
 	var wld World = World {
 		w: WORLD_MAX_X,
 		h: WORLD_MAX_Y,
-	};
-	var is_x bool = false;
-	var i, x, y uint;
+	}
+	var is_x bool = false
+	var x, y uint
+	var conv uint64
+	var err error
+	var i int
 	
 	for x = 0; x < wld.w; x += 1 {
 		for y = 0; y < wld.h; y += 1 {
-			wld.fields[x][y] = false;
+			wld.fields[x][y] = false
 		}
 	}
 	
-	for i = 1; i < argc; i += 1 {
-		if is_x == 0 {
-			x = strtoul(argv[i], NULL, 10);
-			is_x = 1;
+	for i = 0; i < len(os.Args); i += 1 {
+		if is_x == false {
+			conv, err = strconv.ParseUint(os.Args[i], 10, 32)
+			x = (uint) (conv)
+			is_x = true
 		} else {
-			y = strtoul(argv[i], NULL, 10);
-			wld.fields[x][y] = 1;
-			is_x = 0;
+			conv, err = strconv.ParseUint(os.Args[i], 10, 32)
+			y = (uint) (conv)
+			is_x = false
+		}
+		
+		if err != nil {
+			is_x = false
+		} else if is_x {
+			wld.fields[x][y] = true
 		}
 	}
 	
 	for active {
 		for y = 0; y < wld.h; y += 1 {
-			printf("\n");
+			fmt.Print("\n")
 			
 			for x = 0; x < wld.w; x += 1 {
 				if wld.fields[x][y] {
-					printf("x");
+					fmt.Print("x")
 				} else {
-					printf(" ");
+					fmt.Print(" ")
 				}
 			}
 		}
@@ -147,15 +157,13 @@ func main(argc int, argv []string) int {
 		
 		switch fgetc(stdin) {
 		case 'q':
-			active = 0;
-			break;
+			active = false
+			break
 		
 		case EOF:
-			active = 0;
-			fprintf(stderr, "Error end of input\n");
-			break;
+			active = false;
+			fprintf(stderr, "Error end of input\n")
+			break
 		}
 	}
-	
-	return 0;
 }
