@@ -5,14 +5,19 @@
 
 package main
 
-import ("fmt"; "os"; "strconv")
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"bufio"
+)
 
 const WORLD_MAX_X uint = 80
 const WORLD_MAX_Y uint = 24
 
 type World struct {
 	w, h uint
-	fields[WORLD_MAX_X][WORLD_MAX_Y] bool
+	fields [WORLD_MAX_X][WORLD_MAX_Y]bool
 };
 
 func copy_world(src World) (ret World) {
@@ -115,6 +120,8 @@ func main() {
 	var conv uint64
 	var err error
 	var i int
+	var scanner = bufio.NewScanner(os.Stdin)
+	var errw = bufio.NewWriter(os.Stderr)
 	
 	for x = 0; x < wld.w; x += 1 {
 		for y = 0; y < wld.h; y += 1 {
@@ -122,21 +129,20 @@ func main() {
 		}
 	}
 	
-	for i = 0; i < len(os.Args); i += 1 {
+	for i = 1; i < len(os.Args); i += 1 {
+		conv, err = strconv.ParseUint(os.Args[i], 10, 32)
+		
 		if is_x == false {
-			conv, err = strconv.ParseUint(os.Args[i], 10, 32)
 			x = (uint) (conv)
 			is_x = true
 		} else {
-			conv, err = strconv.ParseUint(os.Args[i], 10, 32)
 			y = (uint) (conv)
 			is_x = false
+			wld.fields[x][y] = true
 		}
 		
 		if err != nil {
 			is_x = false
-		} else if is_x {
-			wld.fields[x][y] = true
 		}
 	}
 	
@@ -155,14 +161,14 @@ func main() {
 		
 		eval_world(&wld);
 		
-		switch fgetc(stdin) {
-		case 'q':
-			active = false
-			break
-		
-		case EOF:
+		if scanner.Scan() == false {
+			fmt.Fprint(errw, "Error end of input\n")
 			active = false;
-			fprintf(stderr, "Error end of input\n")
+		}
+		
+		switch scanner.Text() {
+		case "q":
+			active = false
 			break
 		}
 	}

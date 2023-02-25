@@ -1,6 +1,17 @@
 {
-	-go				.
-		->make idiomatic		.
+	-go					v
+		->make idiomatic			.
 
-	-zig				.
+	-zig					.
+	
+	-glider programs			.
+	 (takes x, y for most top-left
+	  dot (of the rect),
+	  prints coords of glider
+	  to stdout, so that
+	  ´cgol $(glider_se 1 1)´
+	  creates a glider goin to south-east)
+		-c					.
+		-go					.
+	  
 }
