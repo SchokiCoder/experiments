@@ -13,5 +13,6 @@
 	  creates a glider goin to south-east)
 		-c					.
 		-go					.
+		-zig					.
 	  
 }
