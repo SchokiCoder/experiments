@@ -8,10 +8,11 @@ const WORLD_MAX_X = 80;
 const WORLD_MAX_Y = 24;
 
 const World = struct {
-	w, h: u32,
+	w: u32,
+	h: u32,
 	fields: bool[WORLD_MAX_X][WORLD_MAX_Y],
 
-	pub fn clone(self: const World) World {
+	pub fn clone(self: World) World {
 		var ret = World {
 			.w = self.w,
 			.h = self.h,
@@ -26,86 +27,108 @@ const World = struct {
 		}
 	}
 
-	pub fn count_neighbors(self: const World, x: u32, y: u32) {
-		ret: u32 = 0;
+	pub fn count_neighbors(self: World, x: u32, y: u32) u32 {
+		var ret: u32 = 0;
 		
-		if (x > 0)
-			if (self.fields[x - 1][y])
+		if (x > 0) {
+			if (self.fields[x - 1][y]) {
 				ret += 1;
+			}
+		}
 
-		if (y > 0)
-			if (self.fields[x][y - 1])
+		if (y > 0) {
+			if (self.fields[x][y - 1]) {
 				ret += 1;
+			}
+		}
 
-		if (x < (self.w - 1))
-			if (self.fields[x + 1][y])
+		if (x < (self.w - 1)) {
+			if (self.fields[x + 1][y]) {
 				ret += 1;
+			}
+		}
 
-		if (y < (self.h - 1))
-			if (self.fields[x][y + 1])
+		if (y < (self.h - 1)) {
+			if (self.fields[x][y + 1]) {
 				ret += 1;
+			}
+		}
 
-		if (x > 0 && y > 0)
-			if (self.fields[x - 1][y - 1])
+		if (x > 0 and y > 0) {
+			if (self.fields[x - 1][y - 1]) {
 				ret += 1;
+			}
+		}
 
-		if (x < (self.w - 1) && y > 0)
-			if (self.fields[x + 1][y - 1])
+		if (x < (self.w - 1) and y > 0) {
+			if (self.fields[x + 1][y - 1]) {
 				ret += 1;
+			}
+		}
 
-		if (x > 0 && y < (self.h - 1))
-			if (self.fields[x - 1][y + 1])
+		if (x > 0 and y < (self.h - 1)) {
+			if (self.fields[x - 1][y + 1]) {
 				ret += 1;
+			}
+		}
 
-		if (x < (self.w - 1) && y < (self.h - 1))
-			if (self.fields[x + 1][y + 1])
+		if (x < (self.w - 1) and y < (self.h - 1)) {
+			if (self.fields[x + 1][y + 1]) {
 				ret += 1;
+			}
+		}
 		
 		return ret;
 	}
 
-	void eval(self: World)
-	{
-		neighbors: u32;
-		x, y: u32;
-		new_wld = World {
+	pub fn eval(self: *World) void {
+		var neighbors: u32 = 0;
+		var x: u32 = 0;
+		var y: u32 = 0;
+		var new_wld = World {
 			.w = self.w,
 			.h = self.h,
 		};
 		
-		new_wld = self.clone();
+		new_wld = self;
 		
-		for (x = 0; x < self.w; x += 1) {
-			for (y = 0; y < self.h; y += 1) {
+		while (x < self.w) : (x += 1) {
+			while (y < self.h) : (y += 1) {
 				neighbors = self.count_neighbors(x, y);
 
-				if (neighbors == 3)
+				if (neighbors == 3) {
 					new_wld.fields[x][y] = true;
-				else if (neighbors != 2)
+				} else if (neighbors != 2) {
 					new_wld.fields[x][y] = false;
+				}
 			}
 		}
 		
-		self = new_wld.clone();
+		self = new_wld;
 	}
 };
 
 pub fn main() void {
-	active: bool = true;
-	wld = World {
+	var active: bool = true;
+	var wld = World {
 		.w = WORLD_MAX_X,
 		.h = WORLD_MAX_Y
 	};
-	is_x = false;
-	i, x, y: u32;
+	var is_x = false;
+	var i: u32 = 0;
+	var x: u32 = 0;
+	var y: u33 = 0;
 	
-	for (x = 0; x < wld.w; x += 1) {
-		for (y = 0; y < wld.h; y += 1) {
+	x = 0;
+	while (x < wld.w) : (x += 1) {
+		y = 0;
+		while (y < wld.h) : (y += 1) {
 			wld.fields[x][y] = false;
 		}
 	}
 	
-	for (i = 1; i < argc; i += 1) {
+	i = 1;
+	while (i < argc) : (i += 1) {
 		if (is_x == 0) {
 			x = strtoul(argv[i], NULL, 10);
 			is_x = true;
@@ -117,10 +140,12 @@ pub fn main() void {
 	}
 	
 	while (active) {
-		for (y = 0; y < wld.h; y += 1) {
+		y = 0;
+		while (y < wld.h) : (y += 1) {
 			printf("\n");
 			
-			for (x = 0; x < wld.w; x += 1) {
+			x = 0;
+			while (x < wld.w) : (x += 1) {
 				if (wld.fields[x][y]) {
 					printf("x");
 				} else {
@@ -132,14 +157,16 @@ pub fn main() void {
 		wld.eval();
 		
 		switch (fgetc(stdin)) {
-		case 'q':
-			active = false;
-			break;
-		
-		case EOF:
-			active = false;
-			fprintf(stderr, "Error end of input\n");
-			break;
+			'q' => {
+				active = false;
+				break;
+			},
+			
+			EOF => {
+				active = false;
+				fprintf(stderr, "Error end of input\n");
+				break;
+			}
 		}
 	}
 }
