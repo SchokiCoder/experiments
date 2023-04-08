@@ -1,7 +1,6 @@
-/* Copyright (c) 2023, Andy Frank Schoknecht
- * Use of this source code is governed by the BSD-3-Clause
- * license, that can be found in the LICENSE file.
- */
+// Copyright (c) 2023, Andy Frank Schoknecht
+// Use of this source code is governed by the BSD-3-Clause
+// license, that can be found in the LICENSE file.
 
 const std = @import("std");
 
@@ -13,16 +12,21 @@ const World = struct {
 	fields: bool[WORLD_MAX_X][WORLD_MAX_Y],
 
 	pub fn clone(self: const World) World {
-		long unsigned x, y;
+		var ret = World {
+			.w = self.w,
+			.h = self.h,
+		};
+		var x: u32 = 0;
+		var y: u32 = 0;
 		
-		for (x = 0; x < out->w; x += 1) {
-			for (y = 0; y < out->h; y += 1) {
-				in->fields[x][y] = out->fields[x][y];
+		while (x < self.w) : (x += 1) {
+			while (y < self.h) : (y += 1) {
+				ret.fields[x][y] = self.fields[x][y];
 			}
 		}
 	}
 
-	pub fn count_neighbors(wld: const World, x: u32, y: u32) {
+	pub fn count_neighbors(self: const World, x: u32, y: u32) {
 		ret: u32 = 0;
 		
 		if (x > 0)

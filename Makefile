@@ -21,10 +21,12 @@ c_debug: clean
 	$(CC) ${C_COPTS} -g -o bin/c ${C_SRC} -Wall -Wextra
 
 zig:
-	$(ZIGC) ${ZIG_OPTS} -o bin/$@ ${ZIG_SRC} -O3
+	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC} -O3
+	mv a.out bin/$@
 
 zig_debug:
-	$(ZIGC) ${ZIG_OPTS} -o bin/$@ ${ZIG_SRC}
+	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC}
+	mv a.out bin/$@
 
 go:
 	$(GOC) ${GO_OPTS} -o bin/$@ ${GO_SRC}
