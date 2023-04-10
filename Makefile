@@ -21,10 +21,12 @@ c_debug: clean
 	$(CC) ${C_COPTS} -g -o bin/c ${C_SRC} -Wall -Wextra
 
 zig:
+	zig fmt ${ZIG_SRC}
 	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC} -O3
 	mv a.out bin/$@
 
 zig_debug:
+	zig fmt ${ZIG_SRC}
 	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC}
 	mv a.out bin/$@
 
@@ -36,4 +38,3 @@ go_debug:
 
 clean:
 	rm -f bin/*
-
