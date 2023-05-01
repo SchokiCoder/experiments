@@ -110,18 +110,7 @@ pub fn main() void {
     var i: u32 = 0;
     var x: u32 = 0;
     var y: u32 = 0;
-
-    // WHY????? -----
-
-    //var test_w = 0 ** WORLD_W;
-    //var test_h = [_]u8{0} ** WORLD_H;
-    //var test_all = [WORLD_W][WORLD_H]bool{[_]bool{false} ** WORLD_H} ** WORLD_W;
-    var test_all =
-        [_][_]false ** WORLD_H ** WORLD_W;
-
-    var wld = test_all; //[WORLD_W][WORLD_H]bool{[_]bool{false} ** WORLD_H} ** WORLD_W };
-
-    // WHY????? -----
+    var wld = [_][_]bool{ [_]bool{.{ false }} ** WORLD_H } ** WORLD_W;
 
     x = 0;
     while (x < wld.w) : (x += 1) {

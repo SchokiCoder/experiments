@@ -4,6 +4,9 @@
 
 	-zig					.
 	
+	-c3					.
+	 (https://c3-lang.org)
+	
 	-glider programs			.
 	 (takes x, y for most top-left
 	  dot (of the rect),
