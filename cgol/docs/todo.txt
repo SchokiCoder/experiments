@@ -1,0 +1,38 @@
+{
+	-glider programs			.
+	 (takes x, y for most top-left
+	  dot (of the rect),
+	  prints coords of glider
+	  to stdout, so that
+	  ´cgol $(glider_se 1 1)´
+	  creates a glider goin to south-east)
+		-c					.
+		-go					.
+		-c2					.
+}
+
+{
+	-go					v
+		->make idiomatic			.
+
+	-zig					x
+	 no tabs  :I
+	
+	-c spontanous performance increase ?	.
+	 gcc debug at 100.000 runs
+	 new: 0m14,155s; 0m14,174s
+	 old: 0m14,503s; 0m14,826s
+	 
+	 gcc O2 at 100.000 runs
+	 new: 0m13,359s; 0m13,265s
+	 old: 0m12,960s; 0m12,890s
+	 
+	 gcc Os at 100.000 runs
+	 new: 0m12,968s; 0m12,932s
+	 old: 0m13,333s; 0m13,264s
+
+	-test go perfomance change		.
+	
+	-c2					.
+	 (https://c2lang.org)
+}

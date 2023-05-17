@@ -1,0 +1,8 @@
+{
+	-finish repurposed smng demo			.
+	-find other examples				.
+	-try finding issues with approaches		.
+	-is the complexity worth the performance?	.
+	 (or other benefits?)
+	-formulate results				.
+}

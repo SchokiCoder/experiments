@@ -1,0 +1,11 @@
+{
+	-README								.
+	 This is a speed comparison between C and Go.  
+	 I want to test speed differences in:
+	 
+	 - basic computing
+	 - memory handling (Go GC performance penalty)
+	 - multithreading
+	
+	-execute according to readme					.
+}

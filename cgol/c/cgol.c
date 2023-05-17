@@ -9,6 +9,9 @@
 #define WORLD_MAX_X 80
 #define WORLD_MAX_Y 24
 
+const int FS_ALIVE = 'x';
+const int FS_DEAD = ' ';
+
 struct World {
 	long unsigned w, h;
 	int fields[WORLD_MAX_X][WORLD_MAX_Y];
@@ -33,35 +36,35 @@ count_neighbors(const struct World *wld,
 	long unsigned ret = 0;
 	
 	if (x > 0)
-		if (wld->fields[x - 1][y])
+		if (wld->fields[x - 1][y] == FS_ALIVE)
 			ret += 1;
 
 	if (y > 0)
-		if (wld->fields[x][y - 1])
+		if (wld->fields[x][y - 1] == FS_ALIVE)
 			ret += 1;
 
 	if (x < (wld->w - 1))
-		if (wld->fields[x + 1][y])
+		if (wld->fields[x + 1][y] == FS_ALIVE)
 			ret += 1;
 
 	if (y < (wld->h - 1))
-		if (wld->fields[x][y + 1])
+		if (wld->fields[x][y + 1] == FS_ALIVE)
 			ret += 1;
 
 	if (x > 0 && y > 0)
-		if (wld->fields[x - 1][y - 1])
+		if (wld->fields[x - 1][y - 1] == FS_ALIVE)
 			ret += 1;
 
 	if (x < (wld->w - 1) && y > 0)
-		if (wld->fields[x + 1][y - 1])
+		if (wld->fields[x + 1][y - 1] == FS_ALIVE)
 			ret += 1;
 
 	if (x > 0 && y < (wld->h - 1))
-		if (wld->fields[x - 1][y + 1])
+		if (wld->fields[x - 1][y + 1] == FS_ALIVE)
 			ret += 1;
 
 	if (x < (wld->w - 1) && y < (wld->h - 1))
-		if (wld->fields[x + 1][y + 1])
+		if (wld->fields[x + 1][y + 1] == FS_ALIVE)
 			ret += 1;
 	
 	return ret;
@@ -83,9 +86,9 @@ void eval_world(struct World *wld)
 			neighbors = count_neighbors(wld, x, y);
 
 			if (neighbors == 3)
-				new_wld.fields[x][y] = 1;
+				new_wld.fields[x][y] = FS_ALIVE;
 			else if (neighbors != 2)
-				new_wld.fields[x][y] = 0;
+				new_wld.fields[x][y] = FS_DEAD;
 		}
 	}
 	
@@ -104,7 +107,7 @@ int main(int argc, char *argv[])
 	
 	for (x = 0; x < wld.w; x += 1) {
 		for (y = 0; y < wld.h; y += 1) {
-			wld.fields[x][y] = 0;
+			wld.fields[x][y] = FS_DEAD;
 		}
 	}
 	
@@ -114,7 +117,7 @@ int main(int argc, char *argv[])
 			is_x = 1;
 		} else {
 			y = strtoul(argv[i], NULL, 10);
-			wld.fields[x][y] = 1;
+			wld.fields[x][y] = FS_ALIVE;
 			is_x = 0;
 		}
 	}
@@ -123,13 +126,8 @@ int main(int argc, char *argv[])
 		for (y = 0; y < wld.h; y += 1) {
 			printf("\n");
 			
-			for (x = 0; x < wld.w; x += 1) {
-				if (wld.fields[x][y]) {
-					printf("x");
-				} else {
-					printf(" ");
-				}
-			}
+			for (x = 0; x < wld.w; x += 1)
+				printf("%c", wld.fields[x][y]);
 		}
 		
 		eval_world(&wld);
