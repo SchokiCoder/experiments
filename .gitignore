@@ -1,2 +1,5 @@
 /bin/*
 /zig/zig-cache/*
+/speed/rust/target
+/speed/rust/Cargo.lock
+/speed/bin

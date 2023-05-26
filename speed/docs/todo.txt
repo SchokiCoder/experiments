@@ -1,6 +1,7 @@
 {
 	-README								.
-	 This is a speed comparison between C and Go.  
+	 This is a speed comparison between C and Go...
+	 ...oops it's all Rust actually lol  
 	 I want to test speed differences in:
 	 
 	 - basic computing
