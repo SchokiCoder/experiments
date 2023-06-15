@@ -15,26 +15,26 @@ cgol: c go zig
 debug: c_debug go_debug zig_debug
 
 c: clean
-	$(CC) ${C_COPTS} -Os -o bin/$@ ${C_SRC}
+	$(CC) ${C_COPTS} -Os -o target/$@ ${C_SRC}
 
 c_debug: clean
-	$(CC) ${C_COPTS} -g -o bin/c ${C_SRC} -Wall -Wextra
+	$(CC) ${C_COPTS} -g -o target/c ${C_SRC} -Wall -Wextra
 
-zig:
+zig: clean
 	zig fmt ${ZIG_SRC}
 	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC} -O3
-	mv a.out bin/$@
+	mv a.out target/$@
 
-zig_debug:
+zig_debug: clean
 	zig fmt ${ZIG_SRC}
 	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC}
-	mv a.out bin/$@
+	mv a.out target/$@
 
-go:
-	$(GOC) ${GO_OPTS} -o bin/$@ ${GO_SRC}
+go: clean
+	$(GOC) ${GO_OPTS} -o target/$@ ${GO_SRC}
 
-go_debug:
-	$(GOC) ${GO_OPTS} -o bin/go ${GO_SRC}
+go_debug: clean
+	$(GOC) ${GO_OPTS} -o target/go ${GO_SRC}
 
 clean:
-	rm -f bin/*
+	rm -f target/*

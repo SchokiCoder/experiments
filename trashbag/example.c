@@ -15,7 +15,8 @@
 #define TB_IMPL
 #include "trashbag.h"
 
-int somefunc(void)
+void
+somefunc(void)
 {
 	struct TrashBag sf_tb = TB_new(malloc, free);
 	char *mystr = TB_push(&sf_tb, sizeof (char) * 20);
@@ -26,7 +27,7 @@ int somefunc(void)
 	TB_free(&sf_tb);
 }
 
-void
+int
 main()
 {
 	struct TrashBag main_tb = TB_new(malloc, free);
@@ -41,4 +42,6 @@ main()
 	somefunc();
 	
 	TB_free(&main_tb);
+	
+	return 0;
 }

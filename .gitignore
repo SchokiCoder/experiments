@@ -1,5 +1,7 @@
-/bin/*
-/zig/zig-cache/*
-/speed/rust/target
+/cgol/target/*
+/prebake/target/*
+/speed/rust/target/*
 /speed/rust/Cargo.lock
 /speed/bin
+/trashbag/target/*
+/zig/zig-cache/*

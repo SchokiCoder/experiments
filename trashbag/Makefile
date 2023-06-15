@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra
+CFLAGS =-std=c89 -Wall -Wextra -Werror
 
 example:
-	$(CC) example.c ${CFLAGS} -g -o $@
+	$(CC) example.c ${CFLAGS} -g -o target/$@
