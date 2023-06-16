@@ -13,12 +13,14 @@ static const int TESTVAL = 128;
 
 int main()
 {
-	struct TrashBag tb = TB_new(malloc, free);
+	struct TrashBag tb;
 	int ***ogre;
 	
-	ogre = TB_push(&tb, sizeof(ogre));
-	*ogre = TB_push(&tb, sizeof(*ogre));
-	**ogre = TB_push(&tb, sizeof(**ogre));
+	tb = TB_new(malloc, realloc, free);
+	
+	ogre = TB_malloc(&tb, sizeof(ogre));
+	*ogre = TB_malloc(&tb, sizeof(*ogre));
+	**ogre = TB_malloc(&tb, sizeof(**ogre));
 	
 	***ogre = TESTVAL;
 	assert(TESTVAL == ***ogre);

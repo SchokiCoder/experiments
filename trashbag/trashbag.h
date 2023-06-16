@@ -4,7 +4,7 @@
  */
 
 /* Don't run for every candy wrapper to the trash can.
- * Just put it in a bag and bring it out at the end of the day.
+ * Just put it in a bag and bring it all out at the end of the day.
  */
 
 #ifndef _TRASHBAG_H
@@ -16,27 +16,43 @@
 
 typedef long unsigned TB_size;
 
+/* Do not directly touch the content of this struct.
+ */
 struct TrashBag {
 	void*   (*allocfn)(TB_size);
+	void*   (*reallocfn)(void*, TB_size);
 	void    (*freefn)();
-	TB_size  len;
+	TB_size len;
 	void    *ptrs[TB_MAX_LEN];
 };
 
-struct TrashBag TB_new(void* (*allocfn)(TB_size), void (*freefn)());
+struct TrashBag
+TB_new(void* (*allocfn)(TB_size),
+       void* (*reallocfn)(void*, TB_size),
+       void (*freefn)());
 
-void* TB_push(struct TrashBag *tb, const TB_size size);
+void* TB_malloc(struct TrashBag *tb, const TB_size size);
 
-void TB_free();
+/* This is costly. Avoid if possible.
+ */
+void*
+TB_realloc(const struct TrashBag *tb,
+           void *ptr,
+	   const TB_size new_size);
+
+void TB_free(struct TrashBag *tb);
 
 
 #ifdef TB_IMPL
 
 struct TrashBag
-TB_new(void* (*allocfn)(TB_size), void (*freefn)())
+TB_new(void* (*allocfn)(TB_size),
+       void* (*reallocfn)(void*, TB_size),
+       void (*freefn)())
 {
 	struct TrashBag ret = {
 		.allocfn = allocfn,
+		.reallocfn = reallocfn,
 		.freefn = freefn,
 		.len = 0
 	};
@@ -45,18 +61,39 @@ TB_new(void* (*allocfn)(TB_size), void (*freefn)())
 }
 
 void*
-TB_push(struct TrashBag *tb, const TB_size size) {
+TB_malloc(struct TrashBag *tb, const TB_size size)
+{
 	tb->ptrs[tb->len] = tb->allocfn(size);
 	tb->len += 1;
 	return tb->ptrs[tb->len - 1];
 }
 
+void*
+TB_realloc(const struct TrashBag *tb,
+           void *ptr,
+	   const TB_size new_size)
+{
+	TB_size i;
+	
+	for (i = 0; i < tb->len; i += 1) {
+		if (ptr == tb->ptrs[i]) {
+			return tb->reallocfn(ptr, new_size);
+		}
+	}
+	
+	return NULL;
+}
+
 void
-TB_free(struct TrashBag *tb) {
+TB_free(struct TrashBag *tb)
+{
 	TB_size i;
 	
 	for (i = 0; i < tb->len; i += 1) {
 		tb->freefn(tb->ptrs[i]);
+#ifndef TB_UNSAFE
+		tb->ptrs[i] = NULL;
+#endif
 	}
 	tb->len = 0;
 }
