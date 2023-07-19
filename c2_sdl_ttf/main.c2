@@ -1,0 +1,66 @@
+module c2_sdl_ttf;
+
+import sdl;
+import sdl_ttf as ttf;
+
+public func i32 main()
+{
+	bool          active = true;
+	sdl.Window*   win;
+	sdl.Renderer* renderer;
+	sdl.Event     event;
+	sdl.Surface*  surface;
+	sdl.Texture*  texture;
+	ttf.Font*     font;
+	sdl.Color     text_fg = { .r = 0, .g = 255, .b = 0 }
+	sdl.Rect      bg_rect = {
+		.x = 0, .y = 0,
+		.w = 640, .h = 480
+	}
+	sdl.Rect      text_rect = {
+		.x = 0, .y = 0,
+		.w = 0, .h = 0
+	}
+	
+	sdl.init(sdl.INIT_EVERYTHING);
+	ttf.init();
+	
+	win = sdl.createWindow("test",
+		sdl.WINDOWPOS_CENTERED, sdl.WINDOWPOS_CENTERED,
+		bg_rect.w, bg_rect.h, 0);
+	renderer = sdl.createRenderer(win, -1, 0);
+	renderer.setDrawColor(255, 0, 255, 255);
+	font = ttf.openFont(
+		"/usr/share/fonts/liberation-mono/LiberationMono-Regular.ttf",
+		32);
+	surface = ttf.renderTextSolid(font, "Hello world", text_fg);
+	texture = sdl.createTextureFromSurface(renderer, surface);
+	text_rect.w = surface.w;
+	text_rect.h = surface.h;
+
+	if (texture == nil) {
+		active = false;
+	}
+
+	while (active) {
+		while (event.poll()) {
+			if (event.eventType == sdl.EventType.QUIT)
+				active = false;
+			
+			renderer.fillRect(&bg_rect);
+			renderer.copy(texture, &text_rect, &text_rect);
+
+			renderer.present();
+		}
+	}
+	
+	surface.free();
+	texture.destroy();
+	renderer.destroy();
+	win.destroy();
+	
+	ttf.quit();
+	sdl.quit();
+	
+	return 0;
+}

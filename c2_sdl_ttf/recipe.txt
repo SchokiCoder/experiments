@@ -1,0 +1,7 @@
+executable c2_sdl_ttf
+	$use sdl2 dynamic
+	$use sdl2_ttf dynamic
+
+	$generate-c
+	main.c2
+end

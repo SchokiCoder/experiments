@@ -5,3 +5,4 @@
 /speed/bin
 /trashbag/target/*
 /zig/zig-cache/*
+/c2_sdl_ttf/output
