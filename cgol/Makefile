@@ -1,40 +1,27 @@
-CC = cc
-C_COPTS = -std=c99 -pedantic
-C_SRC = c/cgol.c
+CC=cc
+C_COPTS=-std=c99 -pedantic -Wall -Wextra
 
-ZIGC = zig build-exe
-ZIG_OPTS = 
-ZIG_SRC = zig/cgol.zig
+ZIGC=zig build-exe
+ZIG_OPTS= 
 
-GOC = go build
-GO_OPTS =
-GO_SRC = go/cgol.go
+GOC=go build
+GO_OPTS=
 
-cgol: c go zig
+all: target/c target/c2 target/go target/zig
 
-debug: c_debug go_debug zig_debug
+target/c: cgol.c
+	$(CC) $(C_COPTS) -g -o $@ $<
 
-c: clean
-	$(CC) ${C_COPTS} -Os -o target/$@ ${C_SRC}
+target/c2: c2/cgol.c2
+	c2c -d c2/
+	mv c2/output/cgol/cgol $@
 
-c_debug: clean
-	$(CC) ${C_COPTS} -g -o target/c ${C_SRC} -Wall -Wextra
+target/zig: cgol.zig
+	zig fmt $<
+	$(ZIGC) $(ZIG_OPTS) -o $@ $<
 
-zig: clean
-	zig fmt ${ZIG_SRC}
-	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC} -O3
-	mv a.out target/$@
-
-zig_debug: clean
-	zig fmt ${ZIG_SRC}
-	$(ZIGC) ${ZIG_OPTS} ${ZIG_SRC}
-	mv a.out target/$@
-
-go: clean
-	$(GOC) ${GO_OPTS} -o target/$@ ${GO_SRC}
-
-go_debug: clean
-	$(GOC) ${GO_OPTS} -o target/go ${GO_SRC}
+target/go: go/cgol.go
+	$(GOC) $(GO_OPTS) -o $@ $<
 
 clean:
 	rm -f target/*

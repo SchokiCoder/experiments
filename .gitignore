@@ -1,8 +1,14 @@
 /cgol/target/*
+/cgol/c2/output/*
+
 /prebake/target/*
+
 /speed/rust/target/*
 /speed/rust/Cargo.lock
-/speed/bin
+/speed/target
+
 /trashbag/target/*
+
 /zig/zig-cache/*
+
 /c2_sdl_ttf/output

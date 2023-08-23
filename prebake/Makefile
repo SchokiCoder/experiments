@@ -1,19 +1,16 @@
-CC = cc
-CFLAGS = -std=c99 -pedantic -g
-COMPTIME_H = comptime.h
+CC=cc
+CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
+
+all: target/smng
+
+target/smng: smng.c djb2.c target/comptime.h
+	$(CC) $(CFLAGS) -o $@ djb2.c $<
+
+target/bake_values: bake_values.c djb2.c bakery.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+target/comptime.h: target/bake_values
+	./$< > $@
 
 clean:
 	rm -f target/*
-
-bake_values.c:
-	$(CC) djb2.c bakery.c $@ -o target/bake_values -Wall -Wextra ${CFLAGS}
-
-bake_constants: clean bake_values.c
-	./target/bake_values > target/${COMPTIME_H}
-
-smng.c: bake_constants
-	$(CC) djb2.c $@ -o target/smng -Wall -Wextra ${CFLAGS}
-
-build: smng.c
-
-.PHONY: build clean bake_constants

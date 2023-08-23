@@ -1,0 +1,4 @@
+executable cgol
+	$generate-c
+	cgol.c2
+end
