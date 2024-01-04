@@ -12,3 +12,9 @@
 /zig/zig-cache/*
 
 /c2_sdl_ttf/output
+
+/sandvich/target
+/sandvich/Cargo.lock
+/sandvich/c_imp/bin
+/sandvich/bin
+/sandvich/*.o

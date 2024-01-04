@@ -1,0 +1,15 @@
+#!/bin/sandvich
+
+fn main() {
+	# If a constant's name contains lower case letters, issue warning.
+	const MYCONST = 42
+	
+	var mystr: str = "I survived the crystalling!"
+	var longstr = "I am" +
+		"a" +
+		"very" +
+		"veery" +
+		"long string~"
+	
+	print("Hello world!\n", mystr)
+}
