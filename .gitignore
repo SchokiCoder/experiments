@@ -11,6 +11,8 @@
 
 /trashbag/target/*
 
+/udp_listener/udp_listener
+
 /zig/zig-cache/*
 
 /c2_sdl_ttf/output
