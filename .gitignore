@@ -3,6 +3,9 @@
 /cgol/target/*
 /cgol/c2/output/*
 
+/comptime_c/comptime
+/comptime_c/smng
+/comptime_c/pregen.h
 /prebake/target/*
 
 /speed/rust/target/*

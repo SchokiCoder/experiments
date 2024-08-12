@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include "djb2.h"
-#include "target/comptime.h"
+#include "pregen.h"
 
 int
 main(const int argc, char *argv[])
