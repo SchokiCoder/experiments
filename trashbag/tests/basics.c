@@ -40,7 +40,7 @@ main()
 	
 	assert(strlen(mystr) == 13);
 	
-	TB_realloc(&tb, mystr, 110);
+	mystr = TB_realloc(&tb, mystr, 110);
 	sprintf(mystr,
 	        "Twenty-five years and my life is still\n"
 		"Trying to get up that great big hill of hope\n"
