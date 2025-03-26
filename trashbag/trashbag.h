@@ -36,7 +36,7 @@ void* TB_malloc(struct TrashBag *tb, const TB_size size);
 /* This is costly. Avoid if possible.
  */
 void*
-TB_realloc(const struct TrashBag *tb,
+TB_realloc(struct TrashBag *tb,
            void *ptr,
 	   const TB_size new_size);
 
@@ -69,23 +69,20 @@ TB_malloc(struct TrashBag *tb, const TB_size size)
 }
 
 void*
-TB_realloc(const struct TrashBag *tb,
+TB_realloc(struct TrashBag *tb,
            void *ptr,
 	   const TB_size new_size)
 {
-#ifdef TB_UNSAFE_SPEEDUP
-	return tb->reallocfn(ptr, new_size);
-#else
 	TB_size i;
 	
 	for (i = 0; i < tb->len; i += 1) {
 		if (ptr == tb->ptrs[i]) {
-			return tb->reallocfn(ptr, new_size);
+			tb->ptrs[i] = tb->reallocfn(ptr, new_size);
+			return tb->ptrs[i];
 		}
 	}
-	
+
 	return NULL;
-#endif
 }
 
 void
