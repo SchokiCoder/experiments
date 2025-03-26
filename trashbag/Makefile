@@ -1,17 +1,22 @@
 CC=cc
-CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
+CFLAGS=-std=c99 -pedantic -Wall -Wextra -g -fsanitize=address,undefined
 LFLAGS=-I .
 
-all: target/basics target/multdim_arrays target/nested_pointers
-
-target/basics: tests/basics.c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^
-
-target/multdim_arrays: tests/multdim_arrays.c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^
-
-target/nested_pointers: tests/nested_pointers.c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^
+.PHONY: clean test
 
 clean:
 	rm -f target/*
+
+target/basics: tests/basics.c target
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
+
+target/multdim_arrays: tests/multdim_arrays.c target
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
+
+target/nested_pointers: tests/nested_pointers.c target
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
+
+test: target/basics target/multdim_arrays target/nested_pointers
+	target/basics
+	target/multdim_arrays
+	target/nested_pointers
