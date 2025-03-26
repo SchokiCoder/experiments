@@ -7,13 +7,13 @@ LFLAGS=-I .
 clean:
 	rm -f target/*
 
-target/basics: tests/basics.c target
+target/basics: tests/basics.c trashbag.h
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
 
-target/multdim_arrays: tests/multdim_arrays.c target
+target/multdim_arrays: tests/multdim_arrays.c trashbag.h
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
 
-target/nested_pointers: tests/nested_pointers.c target
+target/nested_pointers: tests/nested_pointers.c trashbag.h
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $<
 
 test: target/basics target/multdim_arrays target/nested_pointers
