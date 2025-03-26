@@ -73,6 +73,9 @@ TB_realloc(const struct TrashBag *tb,
            void *ptr,
 	   const TB_size new_size)
 {
+#ifdef TB_UNSAFE_SPEEDUP
+	return tb->reallocfn(ptr, new_size);
+#else
 	TB_size i;
 	
 	for (i = 0; i < tb->len; i += 1) {
@@ -82,6 +85,7 @@ TB_realloc(const struct TrashBag *tb,
 	}
 	
 	return NULL;
+#endif
 }
 
 void
@@ -91,7 +95,7 @@ TB_free(struct TrashBag *tb)
 	
 	for (i = 0; i < tb->len; i += 1) {
 		tb->freefn(tb->ptrs[i]);
-#ifndef TB_UNSAFE
+#ifndef TB_UNSAFE_SPEEDUP
 		tb->ptrs[i] = NULL;
 #endif
 	}
