@@ -15,17 +15,17 @@ int main()
 {
 	struct TrashBag tb;
 	int ***ogre;
-	
+
 	tb = TB_new(malloc, realloc, free);
-	
+
 	ogre = TB_malloc(&tb, sizeof(ogre));
 	*ogre = TB_malloc(&tb, sizeof(*ogre));
 	**ogre = TB_malloc(&tb, sizeof(**ogre));
-	
+
 	***ogre = TESTVAL;
 	assert(TESTVAL == ***ogre);
-	
+
 	TB_free(&tb);
-	
+
 	return 0;
 }

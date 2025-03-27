@@ -18,7 +18,7 @@ int main()
 	struct TrashBag tb;
 	unsigned long i;
 	int **matrix;
-	
+
 	tb = TB_new(malloc, realloc, free);
 
 	// non contigous memory allocation, too bad
@@ -26,11 +26,11 @@ int main()
 	for (i = 0; i < MATRIX_LEN_X; i++) {
 		matrix[i] = TB_malloc(&tb, (sizeof(**matrix) * MATRIX_LEN_Y));
 	}
-	
+
 	matrix[9][9] = TESTVAL;
 	assert(TESTVAL == matrix[9][9]);
-	
+
 	TB_free(&tb);
-	
+
 	return 0;
 }

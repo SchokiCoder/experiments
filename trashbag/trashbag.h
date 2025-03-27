@@ -22,33 +22,35 @@ struct TrashBag {
 	void*   (*allocfn)(TB_size);
 	void*   (*reallocfn)(void*, TB_size);
 	void    (*freefn)();
-	TB_size len;
+	TB_size  len;
 	void    *ptrs[TB_MAX_LEN];
 };
 
 struct TrashBag
 TB_new(void* (*allocfn)(TB_size),
        void* (*reallocfn)(void*, TB_size),
-       void (*freefn)());
+       void  (*freefn)());
 
-void* TB_malloc(struct TrashBag *tb, const TB_size size);
+void*
+TB_malloc(struct TrashBag *tb,
+          const TB_size    size);
 
 /* This is costly. Avoid if possible.
  */
 void*
 TB_realloc(struct TrashBag *tb,
-           void *ptr,
-	   const TB_size new_size);
+           void            *ptr,
+           const TB_size    new_size);
 
-void TB_free(struct TrashBag *tb);
-
+void
+TB_free(struct TrashBag *tb);
 
 #ifdef TB_IMPL
 
 struct TrashBag
 TB_new(void* (*allocfn)(TB_size),
        void* (*reallocfn)(void*, TB_size),
-       void (*freefn)())
+       void  (*freefn)())
 {
 	struct TrashBag ret = {
 		.allocfn = allocfn,
@@ -56,12 +58,13 @@ TB_new(void* (*allocfn)(TB_size),
 		.freefn = freefn,
 		.len = 0
 	};
-	
+
 	return ret;
 }
 
 void*
-TB_malloc(struct TrashBag *tb, const TB_size size)
+TB_malloc(struct TrashBag *tb,
+          const TB_size    size)
 {
 	tb->ptrs[tb->len] = tb->allocfn(size);
 	tb->len += 1;
@@ -70,11 +73,11 @@ TB_malloc(struct TrashBag *tb, const TB_size size)
 
 void*
 TB_realloc(struct TrashBag *tb,
-           void *ptr,
-	   const TB_size new_size)
+           void            *ptr,
+           const TB_size    new_size)
 {
 	TB_size i;
-	
+
 	for (i = 0; i < tb->len; i += 1) {
 		if (ptr == tb->ptrs[i]) {
 			tb->ptrs[i] = tb->reallocfn(ptr, new_size);
@@ -89,7 +92,7 @@ void
 TB_free(struct TrashBag *tb)
 {
 	TB_size i;
-	
+
 	for (i = 0; i < tb->len; i += 1) {
 		tb->freefn(tb->ptrs[i]);
 #ifndef TB_UNSAFE_SPEEDUP
