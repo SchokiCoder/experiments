@@ -9,4 +9,4 @@ and using copies of the pointers is highly unsafe, breaking with a realloc.
 
 - [x] fix code fmt
 
-- [ ] update copyright
+- [x] update copyright
